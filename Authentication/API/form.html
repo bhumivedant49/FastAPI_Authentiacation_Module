@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <form id="registrationForm" action="http://localhost:8000/register/" method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="full_name">Full Name:</label><br>
+        <input type="text" id="full_name" name="full_name"><br><br>
+        
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <button type="button" onclick="submitForm()">Register</button>
+    </form>
+
+    <script>
+        async function submitForm() {
+            const form = document.getElementById('registrationForm');
+            const formData = new FormData(form);
+            const jsonData = {};
+    
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+    
+            try {
+                const response = await fetch('http://localhost:8000/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                });
+    
+                if (!response.ok) {
+                    const errorMessage = await response.json();
+                    throw new Error(errorMessage.detail);
+                }
+    
+                alert('Registration successful!');
+                form.reset(); // Clear the form after successful registration
+            } catch (error) {
+                alert(`Registration failed: ${error.message}`);
+            }
+        }
+    </script>
+    
+
+</body>
+</html>
